@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threshold — a running log</title>
+<meta name="description" content="Personal training log following Marius Bakken's Norwegian threshold method.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F1EA; --card:#FCFBF8; --ink:#1A1916; --soft:#6E6B63; --faint:#A8A49A;
+    --line:#E4DED3; --line-soft:#EDE8DF;
+    --thr:#16876A; --thr-band:rgba(22,135,106,.13); --thr-line:rgba(22,135,106,.45);
+    --easy:#4B8FC2; --hill:#B0732A; --over:#C2701A; --cap:#C0392B;
+    --display:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.6;
+    -webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,56px)}
+  .wrap{max-width:760px;margin:0 auto}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* header */
+  header{border-bottom:1.5px solid var(--ink);padding-bottom:20px;margin-bottom:24px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--soft);margin-bottom:10px}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(38px,8vw,60px);line-height:.92;letter-spacing:-.02em}
+  .method{font-family:var(--display);font-size:13.5px;color:var(--soft);margin-top:10px;font-weight:500}
+  .profile{text-align:right;font-size:12.5px;color:var(--soft);line-height:1.7}
+  .profile b{font-family:var(--mono);color:var(--ink);font-weight:500}
+
+  /* intro prose */
+  .intro{font-size:16px;color:#3a3934;line-height:1.7;margin-bottom:8px}
+  .intro p{margin-bottom:14px}
+  .intro a{color:var(--thr);text-decoration:none;border-bottom:1px solid var(--thr-line)}
+  .byline{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em;
+    text-transform:uppercase;margin:30px 0}
+
+  /* latest highlight */
+  .latest{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:30px 0}
+  .latest .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--thr);background:var(--thr-band);border:1px solid var(--thr-line);
+    border-radius:20px;padding:3px 11px;margin-bottom:12px}
+  .latest h3{font-family:var(--display);font-weight:500;font-size:18px;margin-bottom:8px}
+  .latest p{font-size:14.5px;color:var(--soft);line-height:1.66}
+
+  /* section heads */
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:46px 0 16px;
+    flex-wrap:wrap;gap:8px}
+  .sec-head h2{font-family:var(--display);font-weight:500;font-size:21px;letter-spacing:-.01em}
+  .sec-head span{font-size:11.5px;font-family:var(--mono);color:var(--faint);letter-spacing:.05em}
+  .lead{font-size:14.5px;color:var(--soft);margin:-4px 0 16px;line-height:1.6;max-width:62ch}
+
+  /* corridor */
+  .corridor{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 14px}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:11.5px;color:var(--soft);margin-bottom:6px;font-family:var(--mono)}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .legend .band{background:var(--thr-band);border:1px solid var(--thr-line);border-radius:2px}
+
+  /* weekly plan */
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .day{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 8px;display:flex;flex-direction:column;gap:9px;align-items:center;text-align:center}
+  .day .dow{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--faint)}
+  .day .plan{font-size:12px;font-weight:500;line-height:1.25;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .day .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  @media(max-width:600px){
+    .week{grid-template-columns:1fr;gap:6px}
+    .day{flex-direction:row;justify-content:flex-start;gap:14px;text-align:left;padding:11px 15px}
+    .day .dow{width:38px}
+    .day .plan{flex-direction:row;align-items:center;gap:9px}
+  }
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat .k{font-size:11px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+  .stat .v{font-family:var(--display);font-weight:500;font-size:27px;margin-top:6px;letter-spacing:-.01em}
+  .stat .v small{font-size:14px;color:var(--soft);font-weight:400}
+
+  /* estimates */
+  .estimates{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .est{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .est .ed{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--thr);font-weight:500}
+  .est .et{font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:-.02em;margin:8px 0 2px;line-height:1;white-space:nowrap}
+  .est .er{font-family:var(--mono);font-size:12px;color:var(--soft)}
+  .est .ep{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:7px}
+  .est .edelta{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-top:7px;line-height:1.5}
+  .est .edelta b{color:var(--thr);font-weight:500}
+  .trend{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px}
+  .trend-label{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+  .caveat{font-size:12.5px;color:var(--soft);margin-top:14px;line-height:1.65;max-width:64ch}
+
+  /* log */
+  .session{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line-soft)}
+  .session:last-child{border-bottom:none}
+  .date{text-align:center}
+  .date .d{font-family:var(--display);font-weight:700;font-size:24px;line-height:1}
+  .date .m{font-family:var(--mono);font-size:11px;color:var(--soft);margin-top:3px}
+  .date .wd{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+  .s-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .s-name{font-family:var(--display);font-weight:500;font-size:17px}
+  .badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;border:1px solid}
+  .badge.terskel{color:var(--thr);border-color:var(--thr-line);background:var(--thr-band)}
+  .badge.rolig{color:var(--easy);border-color:rgba(75,143,194,.4);background:rgba(75,143,194,.1)}
+  .badge.bakke{color:#9A5B2A;border-color:rgba(154,91,42,.4);background:rgba(194,112,26,.13)}
+  .badge.strength{color:#6E5AA6;border-color:rgba(110,90,166,.4);background:rgba(110,90,166,.12)}
+  .ex{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+  .ex:last-child{border-bottom:none}
+  .ex .exn{font-size:14px;font-weight:500}
+  .ex .exs{font-family:var(--mono);font-size:12.5px;color:var(--soft);margin-top:2px}
+  .ex .exrm{font-family:var(--mono);font-size:12px;color:var(--thr);text-align:right;white-space:nowrap}
+  .smeta{font-family:var(--mono);font-size:12px;color:var(--soft);margin:2px 0 14px}
+  .smeta b{color:var(--ink);font-weight:500}
+  .metrics{display:flex;flex-wrap:wrap;gap:18px 26px;margin-bottom:14px}
+  .metric .ml{font-size:10px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+  .metric .mv{font-family:var(--mono);font-size:15px;font-weight:500;margin-top:2px}
+  .zonebar{display:flex;height:9px;border-radius:5px;overflow:hidden;background:var(--line-soft)}
+  .zonebar i{display:block;height:100%}
+  .z1{background:#9DC4DE} .z2{background:#5DA9D8} .z3{background:#E0A93B} .z4{background:#16876A} .z5{background:#C0392B}
+  .zonekey{display:flex;gap:14px;font-size:10px;font-family:var(--mono);color:var(--faint);margin-top:7px;flex-wrap:wrap}
+
+  /* method note */
+  .note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--thr);border-radius:0 12px 12px 0;
+    padding:20px 22px;margin-top:24px}
+  .note h3{font-family:var(--display);font-weight:500;font-size:15px;margin-bottom:10px}
+  .note p{font-size:14px;color:var(--soft);margin-bottom:9px}
+  .note p:last-child{margin-bottom:0}
+  .note b{color:var(--ink);font-weight:500}
+
+  footer{text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.08em;margin-top:40px}
+  text{font-family:var(--mono)}
+  @media (prefers-reduced-motion:no-preference){
+    .grow{animation:g .7s cubic-bezier(.2,.7,.3,1) both}
+    @keyframes g{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  }
+  :focus-visible{outline:2px solid var(--thr);outline-offset:2px}
+  @media(max-width:520px){.session{grid-template-columns:52px 1fr;gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="top">
+      <div>
+        <div class="eyebrow">Training log · 2026</div>
+        <h1>Threshold.</h1>
+        <div class="method">Lactate-controlled threshold training · following Marius Bakken's principles</div>
+      </div>
+      <div class="profile">
+        Max HR <b>190</b><br>
+        Threshold zone <b>152–162</b> bpm<br>
+        <span style="color:var(--faint)">80–85 % of max</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="intro">
+    <p>Personal training log, following the <b>Norwegian method</b> — Marius Bakken's lactate-controlled threshold approach. The idea: spend a lot of <i>controlled</i> time right at threshold, almost never go truly maximal, and let the volume of quality work do the building. Updated after every session.</p>
+  </div>
+  <div class="byline">Updated 6 July 2026 · 7 runs · 3 strength sessions</div>
+
+  <div class="latest">
+    <span class="tag">Latest run · 2 Jul</span>
+    <h3>Pyramid Intervals — the faster pace holds</h3>
+    <p>11.0 km, controlled again: max 159 bpm (84 %), never over the zone, and threshold pace at ~4:39/km — right where it landed on 29 June (~4:36). That's two sessions at this level, not one, so the step down from ~4:56 looks like a real change rather than a good day. I've moved the "now" projection onto the average of the last two threshold sessions to reflect it.</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>Weekly plan</h2>
+    <span>base template</span>
+  </div>
+  <p class="lead">The structure I'm building around: two threshold days, two strength days, easy running between them, and a long easy run on Sunday. Actual sessions get logged against this.</p>
+  <div class="legend" style="margin-bottom:12px">
+    <span><i style="background:#6E5AA6"></i>strength</span>
+    <span><i style="background:var(--thr)"></i>threshold</span>
+    <span><i style="background:var(--easy)"></i>easy</span>
+  </div>
+  <div class="week" id="weekplan"></div>
+
+  <div class="sec-head">
+    <h2>The threshold corridor</h2>
+    <span>average → max HR vs the target zone</span>
+  </div>
+  <p class="lead">The whole method lives or dies on intensity control. The green zone is the target — 152 to 162 bpm. Threshold days should kiss the zone without blowing through it; easy and hill days should sit well below.</p>
+  <div class="corridor">
+    <div class="legend">
+      <span><i class="band"></i>threshold zone 152–162</span>
+      <span><i style="background:var(--thr)"></i>threshold</span>
+      <span><i style="background:var(--easy)"></i>easy</span>
+      <span><i style="background:var(--hill)"></i>hill</span>
+      <span><i style="background:var(--cap)"></i>cap 90 % = 171</span>
+    </div>
+    <svg id="corr" viewBox="0 0 720 300" width="100%" role="img"
+      aria-label="Six runs shown as bars from average to max heart rate, against the threshold zone 152 to 162 bpm. The four threshold sessions reach the zone; the easy and hill sessions sit well below. 27 June edged over the zone to 167, while 29 June stayed controlled at 161."></svg>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Sessions</div><div class="v">7</div></div>
+    <div class="stat"><div class="k">Run distance</div><div class="v">52.6 <small>km</small></div></div>
+    <div class="stat"><div class="k">Total time</div><div class="v">8:43 <small>h</small></div></div>
+    <div class="stat"><div class="k">Threshold days</div><div class="v">5</div></div>
+  </div>
+
+  <div class="sec-head">
+    <h2>Race-time projections</h2>
+    <span>start vs now · from threshold pace</span>
+  </div>
+  <p class="lead">How my projected times have moved as threshold pace has come down. <b>Start</b> = my first logged threshold session (18 Jun, 4:57/km); <b>now</b> = recent level, the average of my last two threshold sessions (29 Jun & 2 Jul, ~4:37/km).</p>
+  <div class="estimates">
+    <div class="est">
+      <div class="ed">5 km</div>
+      <div class="et">21:50</div>
+      <div class="edelta">from 23:28 · <b>↓ 1:38 (6.9 %)</b></div>
+    </div>
+    <div class="est">
+      <div class="ed">10 km</div>
+      <div class="et">45:32</div>
+      <div class="edelta">from 48:56 · <b>↓ 3:24 (6.9 %)</b></div>
+    </div>
+    <div class="est">
+      <div class="ed">Half · 21.1 km</div>
+      <div class="et">1:40:28</div>
+      <div class="edelta">from 1:47:58 · <b>↓ 7:30 (6.9 %)</b></div>
+    </div>
+  </div>
+  <div class="trend">
+    <div class="trend-label">Projected 10K across threshold sessions · lower = faster</div>
+    <svg id="trend" viewBox="0 0 320 96" width="100%" role="img"
+      aria-label="Projected 10K time across five threshold sessions: 48:56 on 18 June, rising to 50:30 on 24 June, falling to 48:45 on 27 June and 45:16 on 29 June, then holding at 45:48 on 2 July."></svg>
+  </div>
+  <p class="caveat"><b>Now with a bit more weight.</b> The faster threshold pace has held for two sessions in a row (29 Jun and 2 Jul), so the step down looks like a real change rather than a single good day — the trajectory has flattened at the lower level rather than bouncing back. It's still only ~2 weeks of data with no long runs or test race, so treat the exact times as projections, not promises; the half-marathon especially leans optimistic without endurance-specific work. But the direction is now credible. Projections use the Riegel model from threshold pace.</p>
+
+  <div class="sec-head">
+    <h2>Session log</h2>
+    <span>newest first</span>
+  </div>
+  <div id="log"></div>
+
+  <div class="sec-head">
+    <h2>Strength</h2>
+    <span>supporting work</span>
+  </div>
+  <p class="lead">Gym sessions logged alongside the running. Estimated 1RM shown per exercise (best working set).</p>
+  <div id="strengthlog"></div>
+
+  <div class="note">
+    <h3>Method notes</h3>
+    <p>The interval sessions are built as <b>broken threshold reps</b> (800 m repeats, broken miles, 600 m, pyramids) — exactly the method's logic: chop the work into intervals to pile up the most volume at threshold pace without tipping over.</p>
+    <p>The mountain hike keeps heart rate low as a genuine <b>easy day</b>, while the 15 % treadmill session is really <b>hill / strength work</b> — about 480 m of vertical in 40 minutes at low heart rate. Hill work is a recognized part of the Bakken setup, so it slots in alongside the threshold days.</p>
+    <p>One thing I'm watching: the method is really <b>lactate-controlled</b>. Heart rate (80–85 %) is a solid proxy, but a lactate meter targeting ~2–4 mmol/L is the next step for the precision the system is built on. Double-threshold days — two sessions in one day — are the classic structure I haven't started yet.</p>
+  </div>
+
+  <footer>UPDATED AFTER EVERY SESSION</footer>
+</div>
+
+<script>
+const sessions = [
+  {date:'18',mon:'Jun',wd:'THU',name:'800m Repeats',type:'terskel',dist:'7.52',dur:'43:48',pace:'5:49',avgHr:145,maxHr:162,cad:152,gain:47,zones:[2,15,39,44,0]},
+  {date:'21',mon:'Jun',wd:'SUN',name:'Mountain hike',type:'rolig',dist:'11.73',dur:'3:08:24',pace:'–',avgHr:105,maxHr:137,cad:97,gain:672,zones:[75,24,1,0,0]},
+  {date:'24',mon:'Jun',wd:'WED',name:'Broken Miles',type:'terskel',dist:'10.51',dur:'1:06:04',pace:'6:17',avgHr:141,maxHr:163,cad:144,gain:108,zones:[9,19,29,43,0]},
+  {date:'27',mon:'Jun',wd:'SAT',name:'600m Madness',type:'terskel',dist:'10.06',dur:'1:00:31',pace:'6:01',avgHr:143,maxHr:167,cad:150,gain:69,zones:[3,22,33,43,0]},
+  {date:'28',mon:'Jun',wd:'SUN',name:'Treadmill · 15% incline',type:'bakke',dist:'3.22',dur:'40:00',pace:'12:25',avgHr:118,maxHr:133,cad:107,gain:480,incline:'15%',zones:[26,74,0,0,0]},
+  {date:'29',mon:'Jun',wd:'MON',name:'600m Madness',type:'terskel',dist:'10.27',dur:'1:01:10',pace:'5:57',avgHr:140,maxHr:161,cad:149,gain:89,zones:[3,32,29,36,0]},
+  {date:'2',mon:'Jul',wd:'THU',name:'Pyramid Intervals',type:'terskel',dist:'11.00',dur:'1:02:43',pace:'5:42',avgHr:138,maxHr:159,cad:152,gain:62,zones:[10,24,36,30,0]},
+];
+const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
+
+/* weekly plan */
+(function(){
+  const plan=[
+    {dow:'MON',label:'Strength A',type:'strength'},
+    {dow:'TUE',label:'Threshold run',type:'threshold'},
+    {dow:'WED',label:'Easy run',type:'easy'},
+    {dow:'THU',label:'Strength B',type:'strength'},
+    {dow:'FRI',label:'Threshold run',type:'threshold'},
+    {dow:'SAT',label:'Easy run',type:'easy'},
+    {dow:'SUN',label:'Long easy run',type:'easy'},
+  ];
+  const color={strength:'#6E5AA6',threshold:'var(--thr)',easy:'var(--easy)'};
+  const box=document.getElementById('weekplan'); if(!box) return;
+  plan.forEach(p=>{
+    const d=document.createElement('div');d.className='day';
+    d.innerHTML=`<div class="dow">${p.dow}</div><div class="plan"><span class="dot" style="background:${color[p.type]}"></span>${p.label}</div>`;
+    box.appendChild(d);
+  });
+})();
+
+/* corridor */
+(function(){
+  const W=720,H=300,padL=44,padR=14,padT=18,padB=46,hiHr=178,loHr=96;
+  const y=hr=>padT+(hiHr-hr)/(hiHr-loHr)*(H-padT-padB);
+  const n=sessions.length, slot=(W-padL-padR)/n, ns='http://www.w3.org/2000/svg';
+  const svg=document.getElementById('corr');
+  const el=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  svg.appendChild(el('rect',{x:padL,y:y(162),width:W-padL-padR,height:y(152)-y(162),fill:'var(--thr-band)',stroke:'var(--thr-line)','stroke-dasharray':'2 3',rx:2}));
+  svg.appendChild(el('line',{x1:padL,y1:y(171),x2:W-padR,y2:y(171),stroke:'var(--cap)','stroke-width':1,'stroke-dasharray':'4 4',opacity:.6}));
+  const cap=el('text',{x:W-padR,y:y(171)-5,'text-anchor':'end',fill:'var(--cap)','font-size':10});cap.textContent='171';svg.appendChild(cap);
+  [110,130,150,170].forEach(v=>{
+    svg.appendChild(el('line',{x1:padL,y1:y(v),x2:W-padR,y2:y(v),stroke:'var(--line)','stroke-width':1}));
+    const t=el('text',{x:padL-8,y:y(v)+3,'text-anchor':'end',fill:'var(--faint)','font-size':10});t.textContent=v;svg.appendChild(t);
+  });
+  sessions.forEach((s,i)=>{
+    const cx=padL+slot*(i+.5);
+    const col=s.type==='terskel'?'var(--thr)':(s.type==='bakke'?'var(--hill)':'var(--easy)');
+    const top=y(s.maxHr), bot=y(s.avgHr);
+    const bar=el('rect',{x:cx-7,y:top,width:14,height:Math.max(bot-top,3),rx:7,fill:col,opacity:.22,class:'grow'});
+    bar.style.transformBox='fill-box'; bar.style.transformOrigin='bottom'; svg.appendChild(bar);
+    svg.appendChild(el('line',{x1:cx-9,y1:y(s.maxHr),x2:cx+9,y2:y(s.maxHr),stroke:col,'stroke-width':2.5,'stroke-linecap':'round'}));
+    svg.appendChild(el('circle',{cx,cy:y(s.avgHr),r:4.5,fill:col,stroke:'var(--card)','stroke-width':2}));
+    const mv=el('text',{x:cx,y:y(s.maxHr)-9,'text-anchor':'middle',fill:col,'font-size':11,'font-weight':500});mv.textContent=s.maxHr;svg.appendChild(mv);
+    const xl=el('text',{x:cx,y:H-padB+18,'text-anchor':'middle',fill:'var(--soft)','font-size':10});xl.textContent=s.date+' Jun';svg.appendChild(xl);
+    const xl2=el('text',{x:cx,y:H-padB+31,'text-anchor':'middle',fill:'var(--faint)','font-size':9});xl2.textContent=s.name.split(' ')[0];svg.appendChild(xl2);
+  });
+})();
+
+/* projected-10K trajectory */
+(function(){
+  const pts=[{d:'18',t:2936},{d:'24',t:3030},{d:'27',t:2925},{d:'29',t:2716},{d:'2',t:2748}];
+  const svg=document.getElementById('trend'); if(!svg) return;
+  const ns='http://www.w3.org/2000/svg';
+  const el=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const W=320,padL=12,padR=12,padT=16,padB=26,plotW=W-padL-padR,plotH=96-padT-padB;
+  const ts=pts.map(p=>p.t),tmax=Math.max(...ts),tmin=Math.min(...ts),rng=(tmax-tmin)||1;
+  const x=i=>padL+i/(pts.length-1)*plotW, y=t=>padT+(tmax-t)/rng*plotH;
+  const tfmt=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  svg.appendChild(el('polyline',{points:pts.map((p,i)=>`${x(i).toFixed(1)},${y(p.t).toFixed(1)}`).join(' '),
+    fill:'none',stroke:'var(--thr-line)','stroke-width':2,'stroke-linejoin':'round'}));
+  pts.forEach((p,i)=>{
+    const last=i===pts.length-1;
+    svg.appendChild(el('circle',{cx:x(i),cy:y(p.t),r:last?5:3.5,fill:last?'var(--thr)':'var(--card)',
+      stroke:last?'var(--card)':'var(--thr)','stroke-width':2}));
+    const lbl=el('text',{x:x(i),y:92,'text-anchor':'middle',fill:'var(--faint)','font-size':9});lbl.textContent=p.d;svg.appendChild(lbl);
+  });
+  const f=el('text',{x:x(0),y:y(pts[0].t)-8,'text-anchor':'start',fill:'var(--soft)','font-size':10});f.textContent=tfmt(pts[0].t);svg.appendChild(f);
+  const k=pts.length-1;
+  const l=el('text',{x:x(k),y:y(pts[k].t)-9,'text-anchor':'end',fill:'var(--thr)','font-size':10,'font-weight':500});l.textContent=tfmt(pts[k].t);svg.appendChild(l);
+})();
+
+/* log */
+(function(){
+  const zl=['Z1','Z2','Z3','Z4','Z5'], log=document.getElementById('log');
+  [...sessions].reverse().forEach(s=>{
+    const card=document.createElement('div');card.className='session';
+    const zoneBar=s.zones.map((z,i)=>z>0?`<i class="z${i+1}" style="width:${z}%"></i>`:'').join('');
+    const zoneKey=s.zones.map((z,i)=>z>=10?`${zl[i]} ${z}%`:'').filter(Boolean).join(' · ');
+    const paceRow=s.pace!=='–'?`<div class="metric"><div class="ml">Pace</div><div class="mv">${s.pace}/km</div></div>`:'';
+    const inclRow=s.incline?`<div class="metric"><div class="ml">Incline</div><div class="mv">${s.incline}</div></div>`:'';
+    card.innerHTML=`
+      <div class="date"><div class="d">${s.date}</div><div class="m">${s.mon}</div><div class="wd">${s.wd}</div></div>
+      <div>
+        <div class="s-head"><span class="s-name">${s.name}</span><span class="badge ${s.type}">${typeLabel[s.type]}</span></div>
+        <div class="metrics">
+          <div class="metric"><div class="ml">Distance</div><div class="mv">${s.dist} km</div></div>
+          <div class="metric"><div class="ml">Time</div><div class="mv">${s.dur}</div></div>
+          ${paceRow}
+          <div class="metric"><div class="ml">HR avg/max</div><div class="mv">${s.avgHr} / ${s.maxHr}</div></div>
+          <div class="metric"><div class="ml">Cadence</div><div class="mv">${s.cad} spm</div></div>
+          ${inclRow}
+          <div class="metric"><div class="ml">Vert. gain</div><div class="mv">+${s.gain} m</div></div>
+        </div>
+        <div class="zonebar">${zoneBar}</div>
+        <div class="zonekey">${zoneKey}</div>
+      </div>`;
+    log.appendChild(card);
+  });
+})();
+/* strength log */
+(function(){
+  const strength=[{
+    date:'01',mon:'Jul',wd:'WED',name:'Fullbody',gym:'EVO Adamstuen',dur:'40 min',vol:'9 526 kg',ex:7,prs:0,
+    lifts:[
+      {n:'Standing Calf Raise (DB)',sets:'40×8 · 40×8 · 40×7',rm:50},
+      {n:'Seated Leg Press',sets:'130×8 · 140×8 · 150×4',rm:174},
+      {n:'Seated Row',sets:'105×8 · 105×7 · 105×6',rm:130},
+      {n:'Lying Leg Curl',sets:'75×6 · 75×6 · 75×5',rm:87},
+      {n:'Chest Press',sets:'90×7 · 90×5 · 90×4',rm:108},
+      {n:'Bicep Curl (DB)',sets:'18×8 · 20×8',rm:25},
+      {n:'Triceps Extension',sets:'20×8 · 22.5×7',rm:27},
+    ]
+  },{
+    date:'3',mon:'Jul',wd:'FRI',name:'Fullbody',dur:'58 min',vol:'8 512 kg',ex:7,prs:0,
+    lifts:[
+      {n:'Standing Calf Raise (DB)',sets:'40×8 · 40×8 · 40×8',rm:50},
+      {n:'Lunge (Barbell)',sets:'80×6 · 80×6 · 80×6',rm:93},
+      {n:'Romanian Deadlift (BB)',sets:'120×8 · 120×8 · 120×6',rm:149},
+      {n:'Pull Up',sets:'+20×6 · +20×5 · +20×3',rm:null},
+      {n:'Chest Fly',sets:'45×5 · 42.5×5 · 42.5×4',rm:51},
+      {n:'Triceps Extension (cable)',sets:'40.8×8 · 45.4×7',rm:54},
+      {n:'Bicep Curl (Cable)',sets:'40.8×8 · 45.4×7',rm:54},
+    ]
+  },{
+    date:'6',mon:'Jul',wd:'MON',name:'Fullbody A',dur:'1 h 6 min',vol:'9 374 kg',ex:10,prs:0,
+    lifts:[
+      {n:'Leg Extension (Machine)',sets:'110×7 · 110×7',rm:132},
+      {n:'Romanian Deadlift (BB)',sets:'122.5×8 · 122.5×8',rm:152},
+      {n:'Hip Thrust (Machine)',sets:'160×7 · 160×7',rm:192},
+      {n:'Seal Row',sets:'20×8 · 20×8',rm:25},
+      {n:'Incline Bench Press (DB)',sets:'32×6',rm:37},
+      {n:'Lateral Raise (Cable)',sets:'7.5×8 · 10×7',rm:12},
+      {n:'Triceps Extension',sets:'30×8 · 32.5×8',rm:40},
+      {n:'Bicep Curl (Cable)',sets:'30×8 · 32.5×8',rm:40},
+      {n:'Cable Crunch',sets:'50×8 · 50×8',rm:62},
+      {n:'Standing Calf Raise (DB)',sets:'40×9 · 40×8 · 40×8',rm:51},
+    ]
+  }];
+  const box=document.getElementById('strengthlog'); if(!box) return;
+  [...strength].reverse().forEach(s=>{
+    const card=document.createElement('div');card.className='session';
+    const rows=s.lifts.map(l=>`<div class="ex"><div><div class="exn">${l.n}</div><div class="exs">${l.sets} kg</div></div><div class="exrm">${l.rm!=null?'1RM ~'+l.rm:'—'}</div></div>`).join('');
+    card.innerHTML=`
+      <div class="date"><div class="d">${s.date}</div><div class="m">${s.mon}</div><div class="wd">${s.wd}</div></div>
+      <div>
+        <div class="s-head"><span class="s-name">${s.name}</span><span class="badge strength">strength</span></div>
+        <div class="smeta">${s.gym?s.gym+' · ':''}<b>${s.dur}</b> · <b>${s.vol}</b> volume · ${s.ex} exercises · ${s.prs} PRs</div>
+        ${rows}
+      </div>`;
+    box.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>
