@@ -131,6 +131,12 @@
   .note p:last-child{margin-bottom:0}
   .note b{color:var(--ink);font-weight:500}
 
+  /* comments */
+  .comments{margin-top:52px;border-top:1.5px solid var(--ink);padding-top:30px}
+  .comments h2{font-family:var(--display);font-weight:500;font-size:22px;margin-bottom:6px}
+  .comments .clead{font-size:14.5px;color:var(--soft);margin-bottom:22px;max-width:60ch}
+  .giscus{margin-top:8px}
+
   footer{text-align:center;font-family:var(--mono);color:var(--faint);letter-spacing:.06em;margin-top:40px}
   footer .last{color:var(--soft);font-size:11.5px}
   footer .last b{color:var(--ink);font-weight:500}
@@ -260,11 +266,36 @@
     <p>One thing I'm watching: the method is really <b>lactate-controlled</b>. Heart rate (80–85 %) is a solid proxy, but a lactate meter targeting ~2–4 mmol/L is the next step for the precision the system is built on. Double-threshold days — two sessions in one day — are the classic structure I haven't started yet.</p>
   </div>
 
+  <!-- ============================================================
+       COMMENTS — giscus (stores comments as GitHub Discussions)
+       Configured for repo: amateurthreshold/amateurthreshold.github.io · category: Announcements
+       ============================================================ -->
+  <section class="comments">
+    <h2>Comments</h2>
+    <p class="clead">Thoughts, questions, or training tips? Pull the method apart, tell me what you'd change, or just say hi. Sign in with GitHub to post.</p>
+    <div class="giscus"></div>
+    <script src="https://giscus.app/client.js"
+      data-repo="amateurthreshold/amateurthreshold.github.io"
+      data-repo-id="R_kgDOTQI1iQ"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOTQI1ic4DAroR"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+
   <footer>
     <div class="last">Last session logged · <b>6 July 2026</b> — Fullbody A (strength)</div>
     <div class="ftnote">Updated after every session</div>
-    <!-- Replace YOURNAME with your Ko-fi handle after signing up at https://ko-fi.com -->
-    <div class="ftnote" style="margin-top:9px"><a href="https://ko-fi.com/YOURNAME" target="_blank" rel="noopener">Support this log</a></div>
+    <!-- Ko-fi handle set to "amateurthreshold" — claim that exact name at https://ko-fi.com, or tell me if you pick a different one -->
+    <div class="ftnote" style="margin-top:9px"><a href="https://ko-fi.com/amateurthreshold" target="_blank" rel="noopener">Support this log</a></div>
   </footer>
 </div>
 
