@@ -167,6 +167,7 @@
   .zonebar i{display:block;height:100%}
   .z1{background:#9DC4DE} .z2{background:#5DA9D8} .z3{background:#E0A93B} .z4{background:#16876A} .z5{background:#C0392B}
   .zonekey{display:flex;gap:14px;font-size:10px;font-family:var(--mono);color:var(--faint);margin-top:7px;flex-wrap:wrap}
+  .entry{font-size:14.5px;color:#3a3934;line-height:1.7;margin-top:16px;max-width:62ch}
 
   /* method note */
   .note{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
@@ -230,9 +231,9 @@
   </div>
 
   <div class="latest">
-    <span class="tag">Latest run · 7 Jul</span>
-    <h3>Extended Kms — legs held, pace kept dropping</h3>
-    <p>12.9 km, the longest session yet, and the fastest threshold pace so far: ~4:33/km (max 163, just brushing the top of the zone). The telling part is the timing — this came the day after Monday's heavy leg session (RDL, hip thrust, leg extension), the exact strength-into-threshold sequence I keep flagging as a risk. This time the legs held up completely and the pace was quicker than ever, so the interference didn't bite. Third threshold session in a row at this faster level.</p>
+    <span class="tag">Latest entry · 7 Jul</span>
+    <h3>Extended Kms</h3>
+    <p>I use Runna to pick my workouts — this time I did Extended Kms. Started running north in Oslo, a bit hilly. Finished 2 rounds before turning back and completing the last 3 intervals through Frognerparken. Felt a bit heavy when I started, but got the bonus of downhill when I turned back. A good session.</p>
   </div>
 
   <div class="sec-head">
@@ -379,7 +380,7 @@ const sessions = [
   {date:'28',mon:'Jun',wd:'SUN',name:'Treadmill · 15% incline',type:'bakke',dist:'3.22',dur:'40:00',pace:'12:25',avgHr:118,maxHr:133,cad:107,gain:480,incline:'15%',zones:[26,74,0,0,0]},
   {date:'29',mon:'Jun',wd:'MON',name:'600m Madness',type:'terskel',dist:'10.27',dur:'1:01:10',pace:'5:57',avgHr:140,maxHr:161,cad:149,gain:89,zones:[3,32,29,36,0]},
   {date:'2',mon:'Jul',wd:'THU',name:'Pyramid Intervals',type:'terskel',dist:'11.00',dur:'1:02:43',pace:'5:42',avgHr:138,maxHr:159,cad:152,gain:62,zones:[10,24,36,30,0]},
-  {date:'7',mon:'Jul',wd:'TUE',name:'Extended Kms',type:'terskel',dist:'12.94',dur:'1:25:16',pace:'6:35',avgHr:143,maxHr:163,cad:151,gain:166,zones:[3,21,35,41,0]},
+  {date:'7',mon:'Jul',wd:'TUE',name:'Extended Kms',type:'terskel',dist:'12.94',dur:'1:25:16',pace:'6:35',avgHr:143,maxHr:163,cad:151,gain:166,zones:[3,21,35,41,0],note:'I use Runna to pick my workouts — this time I did Extended Kms. Started running north in Oslo, a bit hilly. Finished 2 rounds before turning back and completing the last 3 intervals through Frognerparken. Felt a bit heavy when I started, but got the bonus of downhill when I turned back. A good session.'},
 ];
 const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
 
@@ -463,6 +464,7 @@ const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
     const zoneKey=s.zones.map((z,i)=>z>=10?`${zl[i]} ${z}%`:'').filter(Boolean).join(' · ');
     const paceRow=s.pace!=='–'?`<div class="metric"><div class="ml">Pace</div><div class="mv">${s.pace}/km</div></div>`:'';
     const inclRow=s.incline?`<div class="metric"><div class="ml">Incline</div><div class="mv">${s.incline}</div></div>`:'';
+    const entry=s.note?`<p class="entry">${s.note}</p>`:'';
     card.innerHTML=`
       <div class="date"><div class="d">${s.date}</div><div class="m">${s.mon}</div><div class="wd">${s.wd}</div></div>
       <div>
@@ -478,6 +480,7 @@ const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
         </div>
         <div class="zonebar">${zoneBar}</div>
         <div class="zonekey">${zoneKey}</div>
+        ${entry}
       </div>`;
     log.appendChild(card);
   });
