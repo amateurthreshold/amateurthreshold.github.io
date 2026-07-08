@@ -85,9 +85,10 @@
   .grow .gg{color:var(--thr);font-weight:500;text-align:right}
   @media(max-width:420px){.grow{font-size:11.5px;grid-template-columns:1fr 3.8rem 3.8rem 4.4rem;gap:6px}}
 
-  /* strava embed */
-  .strava-embed{display:flex;justify-content:center;margin-top:6px}
-  .strava-embed iframe{max-width:100%;color-scheme:light}
+  /* strava */
+  .strava-embed{margin-top:6px}
+  .strava-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:12px 20px;transition:border-color .15s,color .15s}
+  .strava-btn:hover{border-color:var(--thr);color:var(--thr)}
   @media (prefers-reduced-motion:no-preference){
     .hero,.primer{animation:rise .6s cubic-bezier(.2,.7,.3,1) both}
     .primer{animation-delay:.08s}
@@ -331,9 +332,9 @@
     <h2>Follow along</h2>
     <span>live on strava</span>
   </div>
-  <p class="lead">Every run lands on Strava too. Follows and kudos welcome — it's the quickest way to catch the sessions as they happen.</p>
+  <p class="lead">Every run lands on Strava too — follow there for the live feed. Kudos and follows welcome.</p>
   <div class="strava-embed">
-    <iframe height="454" width="300" frameborder="0" allowtransparency="true" scrolling="no" src="https://www.strava.com/athletes/134611352/latest-rides/28f9b9c11c8296919d1cf7a086ed571dccbf08ab" title="Latest activities on Strava" loading="lazy"></iframe>
+    <a class="strava-btn" href="https://www.strava.com/athletes/134611352" target="_blank" rel="noopener">Follow on Strava →</a>
   </div>
 
   <!-- ============================================================
