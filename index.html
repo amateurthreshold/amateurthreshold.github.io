@@ -43,12 +43,11 @@
     text-transform:uppercase;margin:30px 0}
 
   /* latest highlight */
-  .latest{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:30px 0}
-  .latest .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--thr);background:var(--thr-band);border:1px solid var(--thr-line);
-    border-radius:20px;padding:3px 11px;margin-bottom:12px}
+  .latest{margin:36px 0;padding-top:24px;border-top:1px solid var(--line)}
+  .latest .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--thr);margin-bottom:10px}
   .latest h3{font-family:var(--display);font-weight:500;font-size:18px;margin-bottom:8px}
-  .latest p{font-size:14.5px;color:var(--soft);line-height:1.66}
+  .latest p{font-size:14.5px;color:var(--soft);line-height:1.66;max-width:64ch}
 
   /* hero */
   .hero{padding:6px 0 2px}
@@ -62,15 +61,33 @@
   .runner b{color:var(--soft);font-weight:500}
 
   /* primer */
-  .primer{background:var(--thr-band);border:1px solid var(--thr-line);border-radius:16px;padding:24px 26px;margin:34px 0}
-  .primer h2{font-family:var(--display);font-weight:600;font-size:19px;margin-bottom:10px;letter-spacing:-.01em}
-  .primer p{font-size:15px;color:#33322e;line-height:1.66;max-width:60ch}
-  .primer p b{color:var(--ink);font-weight:600}
+  .primer{margin:34px 0}
+  .primer h2{font-family:var(--display);font-weight:500;font-size:19px;margin-bottom:10px;letter-spacing:-.01em}
+  .primer p{font-size:15.5px;color:#33322e;line-height:1.7;max-width:60ch}
+  .primer p b{color:var(--thr);font-weight:500}
 
   /* plain-words caption */
-  .plain{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin-top:12px}
+  .plain{margin-top:14px;padding-left:16px;border-left:2px solid var(--thr-line);max-width:64ch}
   .plain .pl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--thr);display:block;margin-bottom:5px}
   .plain p{font-size:13.5px;color:var(--soft);line-height:1.6}
+
+  /* goal */
+  .goal{margin:40px 0}
+  .goal-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--thr);margin-bottom:12px}
+  .goal-time{font-family:var(--display);font-weight:700;font-size:clamp(26px,5vw,38px);letter-spacing:-.02em;line-height:1.02}
+  .goal p{font-size:14.5px;color:var(--soft);line-height:1.65;max-width:60ch;margin-top:16px}
+  .gtable{margin-top:22px;border-top:1px solid var(--line)}
+  .grow{display:grid;grid-template-columns:1fr 4.6rem 4.6rem 5rem;gap:10px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line-soft);font-family:var(--mono);font-size:13px}
+  .grow.head{padding:10px 0}
+  .grow.head span{color:var(--faint);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+  .grow .gd{color:var(--ink);font-weight:500}
+  .grow .gn,.grow .gp{color:var(--soft);text-align:right}
+  .grow .gg{color:var(--thr);font-weight:500;text-align:right}
+  @media(max-width:420px){.grow{font-size:11.5px;grid-template-columns:1fr 3.8rem 3.8rem 4.4rem;gap:6px}}
+
+  /* strava embed */
+  .strava-embed{display:flex;justify-content:center;margin-top:6px}
+  .strava-embed iframe{max-width:100%;color-scheme:light}
   @media (prefers-reduced-motion:no-preference){
     .hero,.primer{animation:rise .6s cubic-bezier(.2,.7,.3,1) both}
     .primer{animation-delay:.08s}
@@ -78,50 +95,46 @@
   }
 
   /* section heads */
-  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:46px 0 16px;
-    flex-wrap:wrap;gap:8px}
-  .sec-head h2{font-family:var(--display);font-weight:500;font-size:21px;letter-spacing:-.01em}
-  .sec-head span{font-size:11.5px;font-family:var(--mono);color:var(--faint);letter-spacing:.05em}
-  .lead{font-size:14.5px;color:var(--soft);margin:-4px 0 16px;line-height:1.6;max-width:62ch}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:54px 0 16px;
+    flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--line);padding-bottom:11px}
+  .sec-head h2{font-family:var(--display);font-weight:500;font-size:20px;letter-spacing:-.01em}
+  .sec-head span{font-size:11px;font-family:var(--mono);color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+  .lead{font-size:14.5px;color:var(--soft);margin:0 0 18px;line-height:1.6;max-width:62ch}
 
   /* corridor */
-  .corridor{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 14px}
-  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:11.5px;color:var(--soft);margin-bottom:6px;font-family:var(--mono)}
-  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-  .legend .band{background:var(--thr-band);border:1px solid var(--thr-line);border-radius:2px}
+  .corridor{padding:4px 0 0}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:var(--soft);margin-bottom:10px;font-family:var(--mono)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  .legend .band{width:16px;height:9px;border-radius:0;background:var(--thr-band);border:1px solid var(--thr-line)}
 
   /* weekly plan */
-  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-  .day{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 8px;display:flex;flex-direction:column;gap:9px;align-items:center;text-align:center}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .day{padding:12px 6px;display:flex;flex-direction:column;gap:9px;align-items:center;text-align:center}
   .day .dow{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--faint)}
-  .day .plan{font-size:12px;font-weight:500;line-height:1.25;display:flex;flex-direction:column;align-items:center;gap:6px}
-  .day .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .day .plan{font-size:12px;font-weight:500;line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--soft)}
+  .day .dot{width:7px;height:7px;border-radius:50%;flex:none}
   @media(max-width:600px){
-    .week{grid-template-columns:1fr;gap:6px}
-    .day{flex-direction:row;justify-content:flex-start;gap:14px;text-align:left;padding:11px 15px}
+    .week{grid-template-columns:1fr;gap:0}
+    .day{flex-direction:row;justify-content:flex-start;gap:14px;text-align:left;padding:11px 0;border-bottom:1px solid var(--line-soft)}
     .day .dow{width:38px}
     .day .plan{flex-direction:row;align-items:center;gap:9px}
   }
 
   /* stats */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
-  .stat .k{font-size:11px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
-  .stat .v{font-family:var(--display);font-weight:500;font-size:27px;margin-top:6px;letter-spacing:-.01em}
+  .stats{display:flex;flex-wrap:wrap;gap:24px 44px;margin:6px 0 0;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat .k{font-size:10px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .stat .v{font-family:var(--display);font-weight:500;font-size:28px;margin-top:6px;letter-spacing:-.01em}
   .stat .v small{font-size:14px;color:var(--soft);font-weight:400}
 
   /* estimates */
-  .estimates{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
-  .est{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
-  .est .ed{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--thr);font-weight:500}
-  .est .et{font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:-.02em;margin:8px 0 2px;line-height:1;white-space:nowrap}
-  .est .er{font-family:var(--mono);font-size:12px;color:var(--soft)}
-  .est .ep{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:7px}
+  .estimates{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:26px 24px}
+  .est .ed{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--thr);font-weight:500}
+  .est .et{font-family:var(--display);font-weight:700;font-size:31px;letter-spacing:-.02em;margin:8px 0 2px;line-height:1;white-space:nowrap}
   .est .edelta{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-top:7px;line-height:1.5}
   .est .edelta b{color:var(--thr);font-weight:500}
-  .trend{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px}
-  .trend-label{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
-  .caveat{font-size:12.5px;color:var(--soft);margin-top:14px;line-height:1.65;max-width:64ch}
+  .trend{margin-top:24px}
+  .trend-label{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+  .caveat{font-size:12.5px;color:var(--soft);margin-top:16px;line-height:1.65;max-width:64ch}
 
   /* log */
   .session{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line-soft)}
@@ -130,14 +143,15 @@
   .date .d{font-family:var(--display);font-weight:700;font-size:24px;line-height:1}
   .date .m{font-family:var(--mono);font-size:11px;color:var(--soft);margin-top:3px}
   .date .wd{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
-  .s-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .s-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
   .s-name{font-family:var(--display);font-weight:500;font-size:17px}
-  .badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
-    padding:3px 9px;border-radius:20px;border:1px solid}
-  .badge.terskel{color:var(--thr);border-color:var(--thr-line);background:var(--thr-band)}
-  .badge.rolig{color:var(--easy);border-color:rgba(75,143,194,.4);background:rgba(75,143,194,.1)}
-  .badge.bakke{color:#9A5B2A;border-color:rgba(154,91,42,.4);background:rgba(194,112,26,.13)}
-  .badge.strength{color:#6E5AA6;border-color:rgba(110,90,166,.4);background:rgba(110,90,166,.12)}
+  .badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
+    display:inline-flex;align-items:center;gap:6px}
+  .badge::before{content:"";width:7px;height:7px;border-radius:50%;flex:none;background:var(--faint)}
+  .badge.terskel::before{background:var(--thr)}
+  .badge.rolig::before{background:var(--easy)}
+  .badge.bakke::before{background:var(--hill)}
+  .badge.strength::before{background:#6E5AA6}
   .ex{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-soft)}
   .ex:last-child{border-bottom:none}
   .ex .exn{font-size:14px;font-weight:500}
@@ -148,21 +162,20 @@
   .metrics{display:flex;flex-wrap:wrap;gap:18px 26px;margin-bottom:14px}
   .metric .ml{font-size:10px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
   .metric .mv{font-family:var(--mono);font-size:15px;font-weight:500;margin-top:2px}
-  .zonebar{display:flex;height:9px;border-radius:5px;overflow:hidden;background:var(--line-soft)}
+  .zonebar{display:flex;height:6px;border-radius:0;overflow:hidden;background:var(--line-soft)}
   .zonebar i{display:block;height:100%}
   .z1{background:#9DC4DE} .z2{background:#5DA9D8} .z3{background:#E0A93B} .z4{background:#16876A} .z5{background:#C0392B}
   .zonekey{display:flex;gap:14px;font-size:10px;font-family:var(--mono);color:var(--faint);margin-top:7px;flex-wrap:wrap}
 
   /* method note */
-  .note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--thr);border-radius:0 12px 12px 0;
-    padding:20px 22px;margin-top:24px}
-  .note h3{font-family:var(--display);font-weight:500;font-size:15px;margin-bottom:10px}
-  .note p{font-size:14px;color:var(--soft);margin-bottom:9px}
+  .note{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+  .note h3{font-family:var(--display);font-weight:500;font-size:16px;margin-bottom:12px}
+  .note p{font-size:14px;color:var(--soft);margin-bottom:11px;line-height:1.66;max-width:64ch}
   .note p:last-child{margin-bottom:0}
   .note b{color:var(--ink);font-weight:500}
 
   /* comments */
-  .comments{margin-top:52px;border-top:1.5px solid var(--ink);padding-top:30px}
+  .comments{margin-top:56px;border-top:1px solid var(--line);padding-top:30px}
   .comments h2{font-family:var(--display);font-weight:500;font-size:22px;margin-bottom:6px}
   .comments .clead{font-size:14.5px;color:var(--soft);margin-bottom:22px;max-width:60ch}
   .giscus{margin-top:8px}
@@ -188,12 +201,12 @@
   <div class="hero">
     <div class="kicker">A running log · Oslo · 2026</div>
     <h1>Training like the pros, on amateur legs.</h1>
-    <p class="mission">I'm 38, I live in Oslo, and I'm training by the <b>Norwegian threshold method</b> — the approach behind many of the world's best distance runners — to see how far a dedicated amateur can really get. Every run and every gym session goes here, in the open, chasing my way back to a 40:16 10K and a faster half.</p>
+    <p class="mission">I'm 38, I live in Oslo, and I'm training by the <b>Norwegian threshold method</b> — the approach behind many of the world's best distance runners — to see how far a dedicated amateur can really get. The targets: <b>5K sub-17, 10K sub-35, half sub-1:20</b>. Every run and every gym session goes here, in the open.</p>
     <div class="storyline">
       <span><b>Week 3</b></span>
       <span><b>8</b> runs logged</span>
       <span><b>7.5 %</b> faster so far</span>
-      <span>next target · <b>40:16</b> 10K</span>
+      <span>goals · <b>17 / 35 / 1:20</b></span>
     </div>
     <div class="runner">38 · Oslo · max HR <b>190</b> · threshold <b>152–162</b> bpm · PB <b>10K 40:16</b> / <b>half 1:42:45</b></div>
   </div>
@@ -201,6 +214,18 @@
   <div class="primer">
     <h2>New here? The whole idea, in 20 seconds.</h2>
     <p>Most people think you get faster by running as hard as you can. This method does almost the opposite. You run at a pace that's <b>comfortably hard</b> — quick, but controlled enough that you're never wrecked — and you do it often. That effort level is your <b>threshold</b>. Stack up enough of it, week after week, and you get faster without breaking down. That's the whole trick. Everything below is me testing whether it actually works.</p>
+  </div>
+
+  <div class="goal">
+    <div class="goal-label">The goals</div>
+    <div class="goal-time">Sub-17, sub-35, sub-1:20.</div>
+    <p>Three barriers at roughly the same level of fitness — 5K under 17:00, 10K under 35:00, and the half under 1:20:00 (about 3:24 to 3:48 per km). They're a real jump from my current bests, so it's a long-term climb: build back past my PBs first, then break the barriers one at a time.</p>
+    <div class="gtable">
+      <div class="grow head"><span class="gd">Distance</span><span class="gn">Now</span><span class="gp">PB</span><span class="gg">Goal</span></div>
+      <div class="grow"><span class="gd">5 km</span><span class="gn">21:43</span><span class="gp">—</span><span class="gg">16:59</span></div>
+      <div class="grow"><span class="gd">10 km</span><span class="gn">45:17</span><span class="gp">40:16</span><span class="gg">34:59</span></div>
+      <div class="grow"><span class="gd">Half</span><span class="gn">1:39:52</span><span class="gp">1:42:45</span><span class="gg">1:19:59</span></div>
+    </div>
   </div>
 
   <div class="latest">
@@ -300,6 +325,15 @@
     <h3>Why train this way</h3>
     <p>The method comes from <b>Marius Bakken</b>, a former Norwegian 5000 m runner, and it now sits behind a lot of the sport's best. The core bet is simple: consistent, controlled quality beats occasional heroics. You improve by training hard enough, often enough, for long enough — not by emptying the tank every session.</p>
     <p>In practice, the hard runs are chopped into <b>intervals</b> so I can hold threshold pace longer without tipping over, the easy days stay genuinely easy, and strength and hills build durability. I steer by feel and heart rate here; the purists add a finger-prick <b>lactate meter</b> for extra precision — a step I may take later.</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>Follow along</h2>
+    <span>live on strava</span>
+  </div>
+  <p class="lead">Every run lands on Strava too. Follows and kudos welcome — it's the quickest way to catch the sessions as they happen.</p>
+  <div class="strava-embed">
+    <iframe height="454" width="300" frameborder="0" allowtransparency="true" scrolling="no" src="https://www.strava.com/athletes/134611352/latest-rides/28f9b9c11c8296919d1cf7a086ed571dccbf08ab" title="Latest activities on Strava" loading="lazy"></iframe>
   </div>
 
   <!-- ============================================================
