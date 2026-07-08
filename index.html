@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Threshold — a running log</title>
-<meta name="description" content="Personal training log following Marius Bakken's Norwegian threshold method.">
+<title>Amateur Threshold — chasing the Norwegian method</title>
+<meta name="description" content="A 38-year-old amateur in Oslo training by the Norwegian threshold method, logging every run and lift in the open.">
+<meta property="og:title" content="Amateur Threshold — chasing the Norwegian method">
+<meta property="og:description" content="Training like the pros, on amateur legs. Every session, in the open.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -46,6 +49,33 @@
     border-radius:20px;padding:3px 11px;margin-bottom:12px}
   .latest h3{font-family:var(--display);font-weight:500;font-size:18px;margin-bottom:8px}
   .latest p{font-size:14.5px;color:var(--soft);line-height:1.66}
+
+  /* hero */
+  .hero{padding:6px 0 2px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--thr);margin-bottom:20px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,8.5vw,66px);line-height:.96;letter-spacing:-.025em;max-width:14ch}
+  .hero .mission{font-size:clamp(15.5px,2vw,17.5px);color:#3a3934;line-height:1.62;max-width:56ch;margin-top:22px}
+  .hero .mission b{color:var(--ink);font-weight:500}
+  .storyline{display:flex;flex-wrap:wrap;gap:9px 22px;font-family:var(--mono);font-size:12.5px;color:var(--soft);margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+  .storyline b{color:var(--thr);font-weight:500}
+  .runner{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.03em;margin-top:12px}
+  .runner b{color:var(--soft);font-weight:500}
+
+  /* primer */
+  .primer{background:var(--thr-band);border:1px solid var(--thr-line);border-radius:16px;padding:24px 26px;margin:34px 0}
+  .primer h2{font-family:var(--display);font-weight:600;font-size:19px;margin-bottom:10px;letter-spacing:-.01em}
+  .primer p{font-size:15px;color:#33322e;line-height:1.66;max-width:60ch}
+  .primer p b{color:var(--ink);font-weight:600}
+
+  /* plain-words caption */
+  .plain{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin-top:12px}
+  .plain .pl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--thr);display:block;margin-bottom:5px}
+  .plain p{font-size:13.5px;color:var(--soft);line-height:1.6}
+  @media (prefers-reduced-motion:no-preference){
+    .hero,.primer{animation:rise .6s cubic-bezier(.2,.7,.3,1) both}
+    .primer{animation-delay:.08s}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  }
 
   /* section heads */
   .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:46px 0 16px;
@@ -155,25 +185,23 @@
 <body>
 <div class="wrap">
 
-  <header>
-    <div class="top">
-      <div>
-        <div class="eyebrow">Training log · 2026</div>
-        <h1>Threshold.</h1>
-        <div class="method">Lactate-controlled threshold training · following Marius Bakken's principles</div>
-      </div>
-      <div class="profile">
-        <b>38</b> · Oslo<br>
-        Max HR <b>190</b> · threshold <b>152–162</b> (80–85 %)<br>
-        <span style="color:var(--faint)">PB · 10K 40:16 · half 1:42:45</span>
-      </div>
+  <div class="hero">
+    <div class="kicker">A running log · Oslo · 2026</div>
+    <h1>Training like the pros, on amateur legs.</h1>
+    <p class="mission">I'm 38, I live in Oslo, and I'm training by the <b>Norwegian threshold method</b> — the approach behind many of the world's best distance runners — to see how far a dedicated amateur can really get. Every run and every gym session goes here, in the open, chasing my way back to a 40:16 10K and a faster half.</p>
+    <div class="storyline">
+      <span><b>Week 3</b></span>
+      <span><b>8</b> runs logged</span>
+      <span><b>7.5 %</b> faster so far</span>
+      <span>next target · <b>40:16</b> 10K</span>
     </div>
-  </header>
-
-  <div class="intro">
-    <p>Personal training log, following the <b>Norwegian method</b> — Marius Bakken's lactate-controlled threshold approach. The idea: spend a lot of <i>controlled</i> time right at threshold, almost never go truly maximal, and let the volume of quality work do the building. Updated after every session.</p>
+    <div class="runner">38 · Oslo · max HR <b>190</b> · threshold <b>152–162</b> bpm · PB <b>10K 40:16</b> / <b>half 1:42:45</b></div>
   </div>
-  <div class="byline">Updated 7 July 2026 · 8 runs · 3 strength sessions</div>
+
+  <div class="primer">
+    <h2>New here? The whole idea, in 20 seconds.</h2>
+    <p>Most people think you get faster by running as hard as you can. This method does almost the opposite. You run at a pace that's <b>comfortably hard</b> — quick, but controlled enough that you're never wrecked — and you do it often. That effort level is your <b>threshold</b>. Stack up enough of it, week after week, and you get faster without breaking down. That's the whole trick. Everything below is me testing whether it actually works.</p>
+  </div>
 
   <div class="latest">
     <span class="tag">Latest run · 7 Jul</span>
@@ -182,10 +210,10 @@
   </div>
 
   <div class="sec-head">
-    <h2>Weekly plan</h2>
-    <span>base template</span>
+    <h2>This week</h2>
+    <span>the plan I follow</span>
   </div>
-  <p class="lead">The structure I'm building around: two threshold days, two strength days, easy running between them, and a long easy run on Sunday. Actual sessions get logged against this.</p>
+  <p class="lead">A normal week: two hard-but-controlled threshold runs, two gym sessions, easy running around them, and one long easy run on Sunday. Nothing heroic — that consistency is the point.</p>
   <div class="legend" style="margin-bottom:12px">
     <span><i style="background:#6E5AA6"></i>strength</span>
     <span><i style="background:var(--thr)"></i>threshold</span>
@@ -194,10 +222,10 @@
   <div class="week" id="weekplan"></div>
 
   <div class="sec-head">
-    <h2>The threshold corridor</h2>
-    <span>average → max HR vs the target zone</span>
+    <h2>Staying in the zone</h2>
+    <span>every run, by heart rate</span>
   </div>
-  <p class="lead">The whole method lives or dies on intensity control. The green zone is the target — 152 to 162 bpm. Threshold days should kiss the zone without blowing through it; easy and hill days should sit well below.</p>
+  <p class="lead">Getting the intensity right is the whole game. The green band is the target — 152 to 162 bpm, hard but controlled. Threshold days should reach into it; easy and hill days stay well below.</p>
   <div class="corridor">
     <div class="legend">
       <span><i class="band"></i>threshold zone 152–162</span>
@@ -207,7 +235,11 @@
       <span><i style="background:var(--cap)"></i>cap 90 % = 171</span>
     </div>
     <svg id="corr" viewBox="0 0 720 300" width="100%" role="img"
-      aria-label="Six runs shown as bars from average to max heart rate, against the threshold zone 152 to 162 bpm. The four threshold sessions reach the zone; the easy and hill sessions sit well below. 27 June edged over the zone to 167, while 29 June stayed controlled at 161."></svg>
+      aria-label="Each run shown as a bar from its average up to its maximum heart rate, against the target threshold zone of 152 to 162 bpm. Threshold days reach into the zone; easy and hill days sit well below it. A dashed line marks 90 percent of max heart rate, above which a run was too hard."></svg>
+  </div>
+  <div class="plain">
+    <span class="pl">In plain words</span>
+    <p>Each bar is one run, drawn from its average heart rate up to its peak. Landing in the green band means the effort was right — hard enough to count, easy enough to repeat. Bars poking above the dashed line ran a touch too hard; bars sitting low are easy days doing their job.</p>
   </div>
 
   <div class="stats">
@@ -218,10 +250,10 @@
   </div>
 
   <div class="sec-head">
-    <h2>Race-time projections</h2>
-    <span>start vs now · from threshold pace</span>
+    <h2>How I'd race today</h2>
+    <span>estimated from training pace</span>
   </div>
-  <p class="lead">How my projected times have moved as threshold pace has come down. <b>Start</b> = my first logged threshold session (18 Jun, 4:57/km); <b>now</b> = recent level, the average of my last two threshold sessions (2 & 7 Jul, ~4:36/km).</p>
+  <p class="lead">Rough race times my current training pace suggests I could run right now — and how they've moved in three weeks. <b>Start</b> is my first threshold session (18 Jun); <b>now</b> is the average of my last two (2 &amp; 7 Jul). These are estimates, not race results.</p>
   <div class="estimates">
     <div class="est">
       <div class="ed">5 km</div>
@@ -244,11 +276,15 @@
     <svg id="trend" viewBox="0 0 320 96" width="100%" role="img"
       aria-label="Projected 10K time across six threshold sessions: 48:56 on 18 June, up to 50:30 on 24 June, down to 48:45 on 27 June and 45:16 on 29 June, 45:48 on 2 July, and the fastest yet, 44:45, on 7 July."></svg>
   </div>
+  <div class="plain">
+    <span class="pl">In plain words</span>
+    <p>Each card is a race time I could probably run today, next to what it was three weeks ago — a bigger drop means I've gotten faster. The little line tracks my projected 10K improving session by session. Lower is quicker.</p>
+  </div>
   <p class="caveat"><b>Holding, and still dropping.</b> The faster threshold pace has now held across three sessions (29 Jun, 2 Jul, 7 Jul), with today the quickest of the lot — so this is a genuine trend, not a good day. It's still ~3 weeks of data with no long-run block or test race, so the exact times remain projections rather than promises, and the half especially leans optimistic without endurance-specific work. But the direction is solid. Projections use the Riegel model from threshold pace.</p>
-  <p class="lead" style="margin-top:16px">Against your all-time bests — <b>10K 40:16</b>, <b>half 1:42:45</b> — two things stand out. The current 10K projection (45:17) sits about five minutes off your PB, which fits a base-building block: you're not race-sharp yet, and there's clear room to run back toward that 40:16 as the threshold work sharpens. The half projection (1:39:52), though, is <i>faster</i> than your half PB — a sign your threshold fitness is already ahead of your half-specific endurance. The Sunday long runs are what would turn that speed into a faster half.</p>
+  <p class="lead" style="margin-top:16px">Set against my all-time bests — <b>10K 40:16</b>, <b>half 1:42:45</b> — two things jump out. My current 10K projection (45:17) is about five minutes off that PB, which fits: I'm base-building, not race-sharp, and there's clear room to run back toward 40:16 as the sharper work comes. But the half projection (1:39:52) is actually <i>faster</i> than my half PB — a sign my threshold fitness is already ahead of my endurance over 21 km. The Sunday long runs are what would turn that speed into a faster half.</p>
 
   <div class="sec-head">
-    <h2>Session log</h2>
+    <h2>Every session</h2>
     <span>newest first</span>
   </div>
   <div id="log"></div>
@@ -261,10 +297,9 @@
   <div id="strengthlog"></div>
 
   <div class="note">
-    <h3>Method notes</h3>
-    <p>The interval sessions are built as <b>broken threshold reps</b> (800 m repeats, broken miles, 600 m, pyramids) — exactly the method's logic: chop the work into intervals to pile up the most volume at threshold pace without tipping over.</p>
-    <p>The mountain hike keeps heart rate low as a genuine <b>easy day</b>, while the 15 % treadmill session is really <b>hill / strength work</b> — about 480 m of vertical in 40 minutes at low heart rate. Hill work is a recognized part of the Bakken setup, so it slots in alongside the threshold days.</p>
-    <p>One thing I'm watching: the method is really <b>lactate-controlled</b>. Heart rate (80–85 %) is a solid proxy, but a lactate meter targeting ~2–4 mmol/L is the next step for the precision the system is built on. Double-threshold days — two sessions in one day — are the classic structure I haven't started yet.</p>
+    <h3>Why train this way</h3>
+    <p>The method comes from <b>Marius Bakken</b>, a former Norwegian 5000 m runner, and it now sits behind a lot of the sport's best. The core bet is simple: consistent, controlled quality beats occasional heroics. You improve by training hard enough, often enough, for long enough — not by emptying the tank every session.</p>
+    <p>In practice, the hard runs are chopped into <b>intervals</b> so I can hold threshold pace longer without tipping over, the easy days stay genuinely easy, and strength and hills build durability. I steer by feel and heart rate here; the purists add a finger-prick <b>lactate meter</b> for extra precision — a step I may take later.</p>
   </div>
 
   <!-- ============================================================
@@ -356,7 +391,7 @@ const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
     svg.appendChild(el('line',{x1:cx-9,y1:y(s.maxHr),x2:cx+9,y2:y(s.maxHr),stroke:col,'stroke-width':2.5,'stroke-linecap':'round'}));
     svg.appendChild(el('circle',{cx,cy:y(s.avgHr),r:4.5,fill:col,stroke:'var(--card)','stroke-width':2}));
     const mv=el('text',{x:cx,y:y(s.maxHr)-9,'text-anchor':'middle',fill:col,'font-size':11,'font-weight':500});mv.textContent=s.maxHr;svg.appendChild(mv);
-    const xl=el('text',{x:cx,y:H-padB+18,'text-anchor':'middle',fill:'var(--soft)','font-size':10});xl.textContent=s.date+' Jun';svg.appendChild(xl);
+    const xl=el('text',{x:cx,y:H-padB+18,'text-anchor':'middle',fill:'var(--soft)','font-size':10});xl.textContent=s.date+' '+s.mon;svg.appendChild(xl);
     const xl2=el('text',{x:cx,y:H-padB+31,'text-anchor':'middle',fill:'var(--faint)','font-size':9});xl2.textContent=s.name.split(' ')[0];svg.appendChild(xl2);
   });
 })();
