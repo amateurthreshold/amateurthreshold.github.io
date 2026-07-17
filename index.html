@@ -206,7 +206,7 @@
     <p class="mission">I'm 38, I live in Oslo, and I'm training by the <b>Norwegian threshold method</b> — the approach behind many of the world's best distance runners — to see how far a dedicated amateur can really get. The targets: <b>5K sub-17, 10K sub-35, half sub-1:20</b>. Every run and every gym session goes here, in the open.</p>
     <div class="storyline">
       <span><b>Week 3</b></span>
-      <span><b>9</b> runs logged</span>
+      <span><b>10</b> runs logged</span>
       <span><b>7.5 %</b> faster so far</span>
       <span>goals · <b>17 / 35 / 1:20</b></span>
     </div>
@@ -231,9 +231,9 @@
   </div>
 
   <div class="latest">
-    <span class="tag">Latest entry · 13 Jul</span>
-    <h3>Fullbody B — back after being sick</h3>
-    <p>First session back after four days off ill. Felt ok, but not 100%. Still managed a PR on the barbell lunge (80 kg × 7), so the legs can't have suffered too much.</p>
+    <span class="tag">Latest entry · 16 Jul</span>
+    <h3>Fast 8-4-2s — in a heatwave</h3>
+    <p>Today's intervals. So insanely warm in Oslo today!</p>
   </div>
 
   <div class="sec-head">
@@ -270,10 +270,10 @@
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="k">Sessions</div><div class="v">9</div></div>
-    <div class="stat"><div class="k">Run distance</div><div class="v">72.1 <small>km</small></div></div>
-    <div class="stat"><div class="k">Total time</div><div class="v">10:50 <small>h</small></div></div>
-    <div class="stat"><div class="k">Threshold days</div><div class="v">6</div></div>
+    <div class="stat"><div class="k">Sessions</div><div class="v">10</div></div>
+    <div class="stat"><div class="k">Run distance</div><div class="v">83.2 <small>km</small></div></div>
+    <div class="stat"><div class="k">Total time</div><div class="v">12:02 <small>h</small></div></div>
+    <div class="stat"><div class="k">Threshold days</div><div class="v">7</div></div>
   </div>
 
   <div class="sec-head">
@@ -364,7 +364,7 @@
   </section>
 
   <footer>
-    <div class="last">Last logged · <b>13 July 2026</b> — Fullbody B (strength)</div>
+    <div class="last">Last logged · <b>16 July 2026</b> — Fast 8-4-2s (threshold, ~32 °C)</div>
     <div class="ftnote">Updated after every session</div>
     <!-- Ko-fi handle set to "amateurthreshold" — claim that exact name at https://ko-fi.com, or tell me if you pick a different one -->
     <div class="ftnote" style="margin-top:9px"><a href="https://ko-fi.com/amateurthreshold" target="_blank" rel="noopener">Support this log</a></div>
@@ -383,6 +383,7 @@ const sessions = [
   {date:'7',mon:'Jul',wd:'TUE',name:'Extended Kms',type:'terskel',dist:'12.94',dur:'1:25:16',pace:'6:35',avgHr:143,maxHr:163,cad:151,gain:166,zones:[3,21,35,41,0],note:'I use Runna to pick my workouts — this time I did Extended Kms. Started running north in Oslo, a bit hilly. Finished 2 rounds before turning back and completing the last 3 intervals through Frognerparken. Felt a bit heavy when I started, but got the bonus of downhill when I turned back. A good session.'},
   {date:'8',mon:'Jul',wd:'WED',name:'Easy Run',type:'rolig',dist:'6.55',dur:'42:27',pace:'6:29',avgHr:131,maxHr:143,cad:155,gain:55,zones:[1,53,46,0,0],note:'Nice and easy run. Currently amazing weather in Oslo, with around 25–30 degrees Celsius!'},
   {date:'9',mon:'Jul',wd:'THU',name:'Sick — four days off',type:'rest',note:'Woke up on the 9th feeling off, and it turned into four days completely off (9–12 July). Lost both threshold days, a strength session and the long run. Annoying, but no point forcing it — better to drop a week than dig a hole. Back to it once I feel right.'},
+  {date:'16',mon:'Jul',wd:'THU',name:'Fast 8-4-2s',type:'terskel',dist:'11.06',dur:'1:11:17',pace:'6:26',avgHr:146,maxHr:165,cad:145,gain:100,temp:'~32 °C',zones:[0,18,39,42,0],note:'Today\'s intervals. So insanely warm in Oslo today!'},
 ];
 const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
 
@@ -476,6 +477,7 @@ const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
     const zoneKey=s.zones.map((z,i)=>z>=10?`${zl[i]} ${z}%`:'').filter(Boolean).join(' · ');
     const paceRow=s.pace!=='–'?`<div class="metric"><div class="ml">Pace</div><div class="mv">${s.pace}/km</div></div>`:'';
     const inclRow=s.incline?`<div class="metric"><div class="ml">Incline</div><div class="mv">${s.incline}</div></div>`:'';
+    const tempRow=s.temp?`<div class="metric"><div class="ml">Temp</div><div class="mv">${s.temp}</div></div>`:'';
     const entry=s.note?`<p class="entry">${s.note}</p>`:'';
     card.innerHTML=`
       <div class="date"><div class="d">${s.date}</div><div class="m">${s.mon}</div><div class="wd">${s.wd}</div></div>
@@ -487,7 +489,7 @@ const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
           ${paceRow}
           <div class="metric"><div class="ml">HR avg/max</div><div class="mv">${s.avgHr} / ${s.maxHr}</div></div>
           <div class="metric"><div class="ml">Cadence</div><div class="mv">${s.cad} spm</div></div>
-          ${inclRow}
+          ${inclRow}${tempRow}
           <div class="metric"><div class="ml">Vert. gain</div><div class="mv">+${s.gain} m</div></div>
         </div>
         <div class="zonebar">${zoneBar}</div>
@@ -548,6 +550,20 @@ const typeLabel = {terskel:'threshold', rolig:'easy', bakke:'hill'};
       {n:'Chest Fly',sets:'45×5 · 45×5',rm:51},
       {n:'Face Pull (Cable)',sets:'27.2×8',rm:34},
       {n:'Triceps Dip',sets:'BW×10 · BW×8',rm:null},
+    ]
+  },{
+    date:'15',mon:'Jul',wd:'WED',name:'Fullbody A',dur:'1 h 10 min',vol:'10 005 kg',ex:10,prs:0,
+    lifts:[
+      {n:'Leg Extension (Machine)',sets:'110×8 · 115×6',rm:137},
+      {n:'Romanian Deadlift (BB)',sets:'125×8 · 122.5×8',rm:155},
+      {n:'Hip Thrust (Machine)',sets:'160×8 · 160×8',rm:199},
+      {n:'Seal Row',sets:'22×8 · 22×8',rm:27},
+      {n:'Incline Bench Press (DB)',sets:'32×7',rm:38},
+      {n:'Lateral Raise (Cable)',sets:'10×7 · 10×7',rm:12},
+      {n:'Triceps Extension',sets:'35×8 · 35×5',rm:43},
+      {n:'Bicep Curl (Cable)',sets:'35×8 · 35×8',rm:43},
+      {n:'Cable Crunch',sets:'50×9 · 50×9',rm:64},
+      {n:'Standing Calf Raise (DB)',sets:'40×9 · 40×9 · 40×8',rm:51},
     ]
   }];
   const box=document.getElementById('strengthlog'); if(!box) return;
